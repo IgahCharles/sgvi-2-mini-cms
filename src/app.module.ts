@@ -6,14 +6,14 @@ import { UsersModule } from './users/users.module';
 //We need these to read our environment config variables
 //import { ConfigModule, ConfigService } from '@nestjs/config';
 import { DatabaseModule } from './app.database.module';
-import * as Joi from '@hapi/joi';
+//import * as Joi from '@hapi/joi';
 import { ConfigModule } from '@nestjs/config';
 
 
 @Module({
   imports: [ UsersModule, 
 
-    ConfigModule.forRoot({
+    /* ConfigModule.forRoot({
       validationSchema: Joi.object({
         POSTGRES_HOST: Joi.string().required(),
         POSTGRES_PORT: Joi.number().required(),
@@ -23,6 +23,7 @@ import { ConfigModule } from '@nestjs/config';
         PORT: Joi.number(),
       })
     }),
+    */
     DatabaseModule
   ],
   controllers: [AppController],
