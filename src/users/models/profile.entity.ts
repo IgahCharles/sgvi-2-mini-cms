@@ -16,6 +16,9 @@ export class Profile extends BaseAbstractEntity{
 
     @Column({nullable:true})
     photo:string//photo
+
+    @Column("simple-json", {nullable: true})
+    bulmaProperties: {primaryColor: string, primaryBackground: string}
     
     @JoinColumn()
     @OneToOne(type => User, user => user.profile, {onDelete: 'CASCADE'})

@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create/create-user.dto';
 import { UpdateUserDto } from './dto/update/update-user.dto';
 import { User } from './models/user.entity';
 import { UsersService } from './users.service';
-//import {FindOneParams} from './validators/params.validator';
+import {FindOneParams} from './validators/params.validator';
 
 @Controller('users')
 export class UsersController {

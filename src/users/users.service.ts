@@ -6,7 +6,7 @@ import { CreateUserDto } from './dto/create/create-user.dto';
 import { UpdateUserDto } from './dto/update/update-user.dto';
 import { Profile} from './models/profile.entity';
 import { User} from './models/user.entity';
-//import {FindOneParams} from './validators/params.validator';
+import {FindOneParams} from './validators/params.validator';
 
 @Injectable()
 export class UsersService{
