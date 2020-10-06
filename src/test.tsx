@@ -1,4 +1,3 @@
-/*
 import React from 'react';
 
  const App:React.FC = () => {
@@ -10,4 +9,3 @@ import React from 'react';
     )
 
 }
-*/

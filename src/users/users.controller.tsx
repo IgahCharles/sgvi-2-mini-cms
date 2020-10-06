@@ -1,4 +1,9 @@
-import { Body, Controller, Get, Param,HttpException,HttpStatus,ParseIntPipe, Post, Put,Delete } from '@nestjs/common';
+import { Body, Controller, Get, Param,HttpException,HttpStatus,ParseIntPipe, Post, Put,Delete, Res, Req } from '@nestjs/common';
+import { renderToNodeStream } from 'react-dom/server';
+import App from '../clients_dev/user-react-web-client/src/App';
+import * as React from 'react';
+import { Reply } from 'src/global/custom.interfaces';
+import renderEngine from 'src/global/render.engine';
 import { UpdateResult } from 'typeorm/query-builder/result/UpdateResult';
 import { CreateUserDto } from './dto/create/create-user.dto';
 import { UpdateUserDto } from './dto/update/update-user.dto';
@@ -84,6 +89,42 @@ export class UsersController {
     @Delete(':id')
     delete(@Param('id', ParseIntPipe) id:number):Promise<void>{    //we are not yet using delete for this second commit
         return this.usersService.delete(id)
+
+    }
+
+    @Get('web')
+    web(@Res() reply: Reply) {
+        
+        //We want to render the raw way so that we can call renderToStream
+        const res = reply.raw;
+
+        /*We want to be able to send some initialization data to the react component
+        Just using below string as an illustration placeholder for now. The real value will be 
+        when we implement Authentication and Authorization.
+        The token will contain whatever data you want to pass but in base64 digest format.
+        */
+        const initialProps = {jwtToken : "put-the-token-string-here-if-any"};        
+
+
+        const beforeStream = renderEngine().render('users/before-react-stream.fragment.html', 
+            { title: 'Users Administration', UsersActive: true })
+
+        const afterStream = renderEngine().render('users/after-react-stream.fragment.html', 
+            { initialProps: JSON.stringify(initialProps) })
+
+        //Write the first rendered fragment (upper html part)
+        res.write(beforeStream);
+
+        //write the React app using renderToNodeStream
+        const stream = renderToNodeStream(<App {...initialProps}/>)
+
+        stream.addListener('end', () => {
+            res.write(afterStream); //Write the last rendered fragment (lower html part)
+            res.end();
+        });
+
+        //enable stream piping
+        stream.pipe(res, { end: false });
 
     }
 }
